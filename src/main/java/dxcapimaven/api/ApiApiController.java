@@ -1,7 +1,4 @@
-package DXC.Mavenapiapp.api;
-
-
-import dxcapimaven.api.ApiApi;
+package dxcapimaven.api;
 
 import dxcapimaven.model.*;
 import io.swagger.v3.oas.annotations.Operation;
