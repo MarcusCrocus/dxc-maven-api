@@ -36,9 +36,9 @@ import javax.annotation.Generated;
 @Tag(name = "clientDeleteById", description = "the clientDeleteById API")
 public interface ApiApi {
 
-    default ApiApiDelegate getDelegate() {
-        return new ApiApiDelegate() {};
-    }
+//    default ApiApiDelegate getDelegate() {
+//        return new ApiApiDelegate() {};
+//    }
 
     /**
      * DELETE /api/clients/{client-id} : Delete Customer by ID
@@ -93,12 +93,10 @@ public interface ApiApi {
         produces = { "application/json", "application/xml", "multipart/form-data" }
     )
     
-    default ResponseEntity<Void> deleteApiClientClientId(
+    ResponseEntity<Void> deleteApiClientClientId(
         @NotNull @Min(1) @Max(1000) @Parameter(name = "ClientIdPathParam", description = "13", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "ClientIdPathParam", required = true, defaultValue = "7") Integer clientIdPathParam,
         @Parameter(name = "client-id", description = "client_id", required = true, in = ParameterIn.PATH) @PathVariable("client-id") Integer clientId
-    ) {
-        return getDelegate().deleteApiClientClientId(clientIdPathParam, clientId);
-    }
+    );
 
 
     /**
@@ -158,12 +156,10 @@ public interface ApiApi {
         produces = { "application/json", "application/xml", "multipart/form-data" }
     )
     
-    default ResponseEntity<GetApiClientClientId200Response> getApiClientClientId(
+    ResponseEntity<GetApiClientClientId200Response> getApiClientClientId(
         @NotNull @Min(1) @Max(1000) @Parameter(name = "ClientIdPathParam", description = "13", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "ClientIdPathParam", required = true, defaultValue = "7") Integer clientIdPathParam,
         @Parameter(name = "client-id", description = "client_id", required = true, in = ParameterIn.PATH) @PathVariable("client-id") Integer clientId
-    ) {
-        return getDelegate().getApiClientClientId(clientIdPathParam, clientId);
-    }
+    );
 
 
     /**
@@ -224,13 +220,11 @@ public interface ApiApi {
         produces = { "application/json", "application/xml", "multipart/form-data" }
     )
     
-    default ResponseEntity<GetApiClients201Response> getApiClients(
+    ResponseEntity<GetApiClients201Response> getApiClients(
         @Min(0) @Max(100) @Parameter(name = "LimitParam", description = "100", in = ParameterIn.QUERY) @Valid @RequestParam(value = "LimitParam", required = false, defaultValue = "10") Integer limitParam,
         @Min(1) @Max(100) @Parameter(name = "OffsetParam", description = "10", in = ParameterIn.QUERY) @Valid @RequestParam(value = "OffsetParam", required = false, defaultValue = "10") Integer offsetParam,
         @Parameter(name = "SortBy", description = "2", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SortBy", required = false) Integer sortBy
-    ) {
-        return getDelegate().getApiClients(limitParam, offsetParam, sortBy);
-    }
+    );
 
 
     /**
@@ -284,11 +278,9 @@ public interface ApiApi {
         consumes = { "application/json" }
     )
     
-    default ResponseEntity<PostApiClients201Response> postApiClients(
+    ResponseEntity<PostApiClients201Response> postApiClients(
         @Parameter(name = "Client", description = "Requestin array of Client objects") @Valid @RequestBody(required = false) List<Client> client
-    ) {
-        return getDelegate().postApiClients(client);
-    }
+    );
 
 
     /**
@@ -344,12 +336,10 @@ public interface ApiApi {
         consumes = { "application/json" }
     )
     
-    default ResponseEntity<PostApiClientsClientId201Response> postApiClientsClientId(
+    ResponseEntity<PostApiClientsClientId201Response> postApiClientsClientId(
         @NotNull @Min(1) @Max(1000) @Parameter(name = "ClientIdPathParam", description = "13", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "ClientIdPathParam", required = true, defaultValue = "7") Integer clientIdPathParam,
         @Parameter(name = "client-id", description = "client_id", required = true, in = ParameterIn.PATH) @PathVariable("client-id") Integer clientId,
         @Parameter(name = "body", description = "Requestin Object of Client") @Valid @RequestBody(required = false) Client body
-    ) {
-        return getDelegate().postApiClientsClientId(clientIdPathParam, clientId, body);
-    }
+    );
 
 }
