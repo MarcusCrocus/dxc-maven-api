@@ -1,0 +1,122 @@
+[
+    {
+        "surname": "Travolta",
+        "age": 25,
+        "name": "John",
+        "isClient": true
+    },
+    {
+        "surname": "Smith",
+        "age": 30,
+        "name": "Will",
+        "isClient": true
+    },
+    {
+        "surname": "Johnson",
+        "age": 40,
+        "name": "Michael",
+        "isClient": false
+    },
+    {
+        "surname": "Brown",
+        "age": 35,
+        "name": "Emily",
+        "isClient": true
+    },
+    {
+        "surname": "Wilson",
+        "age": 28,
+        "name": "Sirena",
+        "isClient": false
+    },
+    {
+        "surname": "Taylor",
+        "age": 45,
+        "name": "Swift",
+        "isClient": true
+    },
+    {
+        "surname": "Milo",
+        "age": 32,
+        "name": "Olivia",
+        "isClient": true
+    },
+    {
+        "surname": "Brown",
+        "age": 29,
+        "name": "James",
+        "isClient": false
+    },
+    {
+        "surname": "Whats",
+        "age": 38,
+        "name": "Emma",
+        "isClient": true
+    },
+    {
+        "surname": "Eniston",
+        "age": 27,
+        "name": "Jennifer",
+        "isClient": true
+    },
+    {
+        "surname": "Travolta",
+        "age": 25,
+        "name": "John",
+        "isClient": true
+    },
+    {
+        "surname": "Smith",
+        "age": 30,
+        "name": "Will",
+        "isClient": true
+    },
+    {
+        "surname": "Johnson",
+        "age": 40,
+        "name": "Michael",
+        "isClient": false
+    },
+    {
+        "surname": "Brown",
+        "age": 35,
+        "name": "Emily",
+        "isClient": true
+    },
+    {
+        "surname": "Wilson",
+        "age": 28,
+        "name": "Sirena",
+        "isClient": false
+    },
+    {
+        "surname": "Taylor",
+        "age": 45,
+        "name": "Swift",
+        "isClient": true
+    },
+    {
+        "surname": "Milo",
+        "age": 32,
+        "name": "Olivia",
+        "isClient": true
+    },
+    {
+        "surname": "Brown",
+        "age": 29,
+        "name": "James",
+        "isClient": false
+    },
+    {
+        "surname": "Whats",
+        "age": 38,
+        "name": "Emma",
+        "isClient": true
+    },
+    {
+        "surname": "day",
+        "age": 27,
+        "name": "Green",
+        "isClient": true
+    }
+]

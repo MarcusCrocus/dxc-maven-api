@@ -1,12 +1,19 @@
 package dxcapimaven.api;
 
 import dxcapimaven.model.*;
+import dxcapimaven.repository.ClientRepo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,10 +33,11 @@ import javax.validation.constraints.NotNull;
 
 
 public class ApiApiController implements ApiApi {
+    private final ClientRepo clientRepo;
 
-    //  List<Client> clientList = new ArrayList<>();
-    private final Map< Integer,Client> clientMap = new HashMap<>();
-    private final Set <Client> clientSet = new HashSet<>();
+    public ApiApiController(ClientRepo clientRepo) {
+        this.clientRepo = clientRepo;
+    }
 
 
     /**
@@ -87,76 +95,21 @@ public class ApiApiController implements ApiApi {
             @Parameter(name = "Client", description = "Requestin array of Client objects") @Valid @RequestBody(required = false) List<Client> client
     ) {
 
-        //        for HashSet implementation
+        // for data base H2
+        Set<Client> clientList = new HashSet<>();
 
-        if(client != null && !client.isEmpty()){
-            for (Client newClient : client){
-                if (!clientSet.contains(newClient)){
-                    clientSet.add(newClient);
-                    System.out.println("Client added" + newClient);
-                }else {
-                    System.out.println("Client adready exist" + newClient);
-                }
+        for (Client c : client) {
+            //check if client exist
+            Optional<Client> existingClient =
+                    clientRepo.findBySurnameAndName(c.getSurname(), c.getName());
+
+            if (!existingClient.isPresent()) {
+                clientList.add(c);
             }
-            return new ResponseEntity<>(HttpStatus.CREATED);
-
-        }else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        clientRepo.saveAll(clientList);
 
-        //for HasMap implementation
-
-        //        // Check if client exist and not empty will post if ther are clients to add
-        //        if (client != null && !client.isEmpty()) {
-        //            for (Client newClient : client) {
-        //
-        //                if (!clientMap.containsKey(newClient.getClientId())) {
-        //                    clientMap.put(newClient.getClientId(), newClient);
-        //                    System.out.println("Client added" + newClient);
-        //                }
-        //            }
-        //            // update the list with new clients
-        //
-        //            //Return succesfull
-        //            return ResponseEntity.status(HttpStatus.CREATED).build();
-        //        } else {
-        //            // bad request
-        //            return ResponseEntity.badRequest().build();
-        //        }
-
-        //        //for List<Client> ferification added just for ArrayList implementation
-
-        //        // Check if client exist and not empty will post if ther are clients to add
-        //        if (client != null && !client.isEmpty()) {
-        //            for (Client newClient : client) {
-        //                boolean clientExist = false;
-        //                for (Client existingClient : clientList) {
-        //                    if (existingClient.getClientId().equals(newClient.getClientId())) {
-        //                        clientExist = true;
-        //                        break;
-        //                    }
-        //                }
-        //                // if client doesn'e exist will add to the collection
-        //                if (!clientExist) {
-        //                    clientList.add(newClient);
-        //                }
-        //            }
-        //            //Return succesfull
-        //            return new ResponseEntity<>(HttpStatus.CREATED);
-        //        } else {
-        //            // bad request
-        //            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        //        }
-
-        //        Verification doesn't exist just for ArrayList implementation
-
-        //        //Adding Array of clients objects from recieving parameters to Array list
-        //        clientList.addAll(client);
-        //
-        //        // creating instanse for response
-        //        PostApiClients201Response response = new PostApiClients201Response();
-        //        response.setData(clientList);
-        //        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 
@@ -224,77 +177,41 @@ public class ApiApiController implements ApiApi {
             @Parameter(name = "SortBy", description = "2", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SortBy", required = false) Integer sortBy
     ) {
 
-        //        For HashSet implementation
+       // for H2 ddbb
 
-        // creating responce
-        GetApiClients201Response response = new  GetApiClients201Response();
+        //defalut sorting param
+        String sortinParam = "isClient";
 
-        List<Client> clientList = new ArrayList<>(clientSet);
-
-        // cheking if there is any param to sort
-        if (sortBy != null){
-            //Sorting algorithm
-            switch (sortBy){
+        if (sortBy != null) {
+            switch (sortBy) {
                 case 1:
-                    clientList.sort(Comparator.comparing(Client::getClientId));
+                    sortinParam = "clientId";
                     break;
                 case 2:
-                    clientList.sort(Comparator.comparing(Client::getName));
+                    sortinParam = "surname";
+                    break;
+                case 3:
+                    sortinParam = "age";
                     break;
                 default:
-                    clientList.sort(Comparator.comparing(Client::getIsClient));
                     break;
             }
         }
+        // sort object based on params
+        Sort sort = Sort.by(sortinParam);
 
-        //          Aplly pagination
-        int startIndex = Math.min(offsetParam, clientList.size());
-        int endtIndex = Math.min(offsetParam + limitParam, clientList.size());
-        List<Client> paginationClient = clientList.subList(startIndex, endtIndex);
+        // Paginated object according sorting params
+        Pageable pageable = PageRequest.of(offsetParam, limitParam, sort);
 
-        // set pagination
-        response.setData(paginationClient);
+        //fetch clients based on sorting and pagination
+        Page<Client> clientPage = clientRepo.findAll(pageable);
 
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        //Response object
+        GetApiClients201Response response = new GetApiClients201Response();
+        response.setData(clientPage.getContent());
 
-        //            //For HasMap implementation
-        //
-        ////          Creating response
-        //        GetApiClients201Response response = new GetApiClients201Response();
-        //
-        ////          Getting values from from cleientMap
-        //        List<Client> clients = new ArrayList<>(clientMap.values());
-        //
-        ////          Sorting algorithm
-        //        Comparator<Client> comparator;
-        //        if ("name".equals(sortBy)) {
-        //            clients.sort(Comparator.comparing(Client::getName));
-        //        } else if ("id".equals(sortBy)) {
-        //            clients.sort(Comparator.comparingInt(Client::getClientId));
-        //        } else {
-        //            // if sorting is not recognizeble, will be applied by name by default
-        //            clients.sort(Comparator.comparing(Client::getName));
-        //        }
-        //
-        ////          Aplly pagination
-        //        int startIndex = Math.min(offsetParam, clients.size());
-        //        int endtIndex = Math.min(offsetParam + limitParam, clients.size());
-        //        List<Client> paginationClient = clients.subList(startIndex, endtIndex);
-        //
-        ////          Setting pagination
-        //        response.setData(paginationClient);
-        //
-        //        return new ResponseEntity<>(response, HttpStatus.OK);
-
-
-        //        //Creating response using List<Client> implementation
-
-        //        GetApiClients201Response response = new GetApiClients201Response();
-        //        response.setData(clientList);
-        //
-        //        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
     /**
      * DELETE /api/clients/{client-id} : Delete Customer by ID
@@ -352,66 +269,14 @@ public class ApiApiController implements ApiApi {
             @NotNull @Min(1) @Max(1000) @Parameter(name = "ClientIdPathParam", description = "13", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "ClientIdPathParam", required = true, defaultValue = "7") Integer clientIdPathParam,
             @Parameter(name = "client-id", description = "client_id", required = true, in = ParameterIn.PATH) @PathVariable("client-id") Integer clientId
     ) {
+        //For H2 ddbb
 
-        //          For HashSet Implementation
-
-        boolean clientExist = false;
-        //find and remove client with given ID
-
-        for (Client client : clientSet){
-            if (client.getClientId().equals(clientIdPathParam)){
-                clientSet.remove(client);
-                clientExist = true;
-                System.out.println("Client removed: " + client);
-                break;
-            }
+        //check if client exist
+        if (!clientRepo.existsById(clientId)) {
+            return ResponseEntity.notFound().build();
         }
-
-        if(clientExist){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT); //cli exist and removed
-        }else {
-            System.out.println("Client with ID: " + clientIdPathParam + " not found");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        //        // for HashMap implementation
-        //        if (clientMap.containsKey(clientId)){
-        //            clientMap.remove(clientId);
-        //            return new ResponseEntity<>(HttpStatus.OK);
-        //        }else {
-        //            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        //        }
-
-        //        // Cheking if client exist
-        //        boolean clientExist = false;
-        //        for (Client client : clientList) {
-        //            if (client.getClientId().equals(clientId)) {
-        //                clientExist = true;
-        //                break;
-        //            }
-        //        }
-        //
-        //        if (clientExist) {
-        //            return new ResponseEntity<>(HttpStatus.CONFLICT); // error 409
-        //        }
-        //        if (body != null) {
-        //            clientList.add(body);
-        //        }
-        //
-        //        return new ResponseEntity<>(HttpStatus.CREATED);
-
-
-        //          Using List<Client>
-
-        //        // serching client in the Array list
-        //        for (Client client : clientList) {
-        //            if (client.getClientId().equals(clientId)) {
-        //                clientList.remove(client);
-        //                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        //            }
-        //        }
-        //        // if not found by ID
-        //        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        clientRepo.deleteById(clientId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     /**
@@ -473,27 +338,19 @@ public class ApiApiController implements ApiApi {
             @Parameter(name = "body", description = "Requestin Object of Client") @Valid @RequestBody(required = false) Client body
     ) {
 
-        //          For HashSet implementation
+        Optional<Client> existingClientOptional = clientRepo.findById(clientId);
 
-        boolean clientUpdated = false;
+        if (existingClientOptional.isPresent()) {
+            Client existingClient = existingClientOptional.get();
+            existingClient.setName(body.getName());
+            existingClient.setSurname(body.getSurname());
+            existingClient.setAge(body.getAge());
+            existingClient.setIsClient(body.getIsClient());
 
-        for (Client client : clientSet){
-            if (client.getClientId().equals(clientIdPathParam)){
-                client.setName(body.getName());
-                client.setSurname(body.getSurname());
-                client.setIsClient(body.getIsClient());
-                client.setAge(body.getAge());
-
-                System.out.println("Client " + client + " was updated");
-                clientUpdated = true;
-            }
-        }
-
-        if (clientUpdated) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT); //return succesful responce of operation
-        }else {
-            System.out.println("Client with the current ID: " + clientIdPathParam + "hasn't been fount");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); //error
+            clientRepo.save(existingClient);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
 
     }
@@ -559,25 +416,43 @@ public class ApiApiController implements ApiApi {
             @NotNull @Min(1) @Max(1000) @Parameter(name = "ClientIdPathParam", description = "13", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "ClientIdPathParam", required = true, defaultValue = "7") Integer clientIdPathParam,
             @Parameter(name = "client-id", description = "client_id", required = true, in = ParameterIn.PATH) @PathVariable("client-id") Integer clientId
     ){
-        //      For HashSet implementation
+        Optional<Client> client = clientRepo.findById(clientId);
 
-        //Serch cli in HashSet
-        Client client = null;
+        if (client.isPresent()) {
+            GetApiClientClientId200Response response = new GetApiClientClientId200Response();
+            response.setData(client.get());
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
 
-        for (Client cli : clientSet){
-            if (cli.getClientId().equals(clientId)){
-                client = cli;
-                break;
+    }
+
+    @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/api/clients/byobject",
+            produces = {"application/json", "application/xml", "multipart/form-data"},
+            consumes = {"application/json"}
+    )
+
+    public ResponseEntity<PostApiClients201Response> findByClientObject(
+            @Parameter(name = "Client", description = "Requestin array of Client objects, or array of object")
+            @Valid
+            @RequestBody(required = false) Client body) {
+
+        if (body.getSurname() != null && body.getName() != null){
+            Optional <Client> existingClient = clientRepo.findBySurnameAndName(body.getSurname(), body.getName());
+            if (existingClient.isPresent()){
+                List<Client> clientSet = new ArrayList<>();
+                clientSet.add(existingClient.get());
+                PostApiClients201Response response = new PostApiClients201Response();
+                response.data(clientSet);
+                return new ResponseEntity(response,HttpStatus.CREATED);
             }
         }
 
-        if (client != null){
-            GetApiClientClientId200Response response = new GetApiClientClientId200Response();
-            response.setData(client); //cli found in HashSet, return client obj
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return ResponseEntity.notFound().build();
+
 
     }
 

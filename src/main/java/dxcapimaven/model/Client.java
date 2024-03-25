@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
 
 
 import javax.annotation.Generated;
@@ -12,19 +13,23 @@ import javax.annotation.Generated;
 /**
  * client
  */
-
+@Entity
+@Table(name = "client_table")
 @Schema(name = "Client", description = "client")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-03-14T10:41:44.990513500+01:00[Europe/Madrid]")
 public class Client {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer clientId;
-
+  @Column(name = "first_name", nullable = false)
   private String name;
-
+  @Column(name = "last_name", nullable = false)
   private String surname;
-
+  @Column(name = "is_client", nullable = false)
   private Boolean isClient = false;
 
+  @Column(name = "age", nullable = false)
   private Integer age;
 
   public Client() {
