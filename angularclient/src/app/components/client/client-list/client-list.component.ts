@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Client } from '../../../client';
+import { ClientService } from '../../../client.service';
 
 @Component({
   selector: 'app-client-list',
@@ -9,78 +10,34 @@ import { Client } from '../../../client';
 export class ClientListComponent implements OnInit{
  
   clients: Client[] = [];
-//adding dummy data to test
-  ngOnInit() : void{
-    this.clients = [
-    {
-      "clientId": 1,
-      "surname": "Travolta",
-      "age": 25,
-      "name": "John",
-      "isClient": true
-    },
-    {
-      "clientId": 2,
-      "surname": "Smith",
-      "age": 30,
-      "name": "Will",
-      "isClient": true
-    },
-    {
-      "clientId": 3,
-      "surname": "Johnson",
-      "age": 40,
-      "name": "Michael",
-      "isClient": false
-    },
-    {
-      "clientId": 4,
-      "surname": "Brown",
-      "age": 35,
-      "name": "Emily",
-      "isClient": true
-    },
-    {
-      "clientId": 5,
-      "surname": "Wilson",
-      "age": 28,
-      "name": "Sirena",
-      "isClient": false
-    },
-    {
-      "clientId": 6,
-      "surname": "Taylor",
-      "age": 45,
-      "name": "Swift",
-      "isClient": true
-    },
-    {
-      "clientId": 7,
-      "surname": "Milo",
-      "age": 32,
-      "name": "Olivia",
-      "isClient": true
-    },
-    {
-      "clientId": 8,
-      "surname": "Brown",
-      "age": 29,
-      "name": "James",
-      "isClient": false
-    },
-    {
-      "clientId": 9,
-      "surname": "Whats",
-      "age": 38,
-      "name": "Emma",
-      "isClient": true
-    },
-    {
-      "clientId": 10,
-      "surname": "Eniston",
-      "age": 27,
-      "name": "Jennifer",
-      "isClient": true
-    }];
+
+  constructor(private clientService: ClientService){}
+  ngOnInit(): void {
+    this.getClients();
+  }
+
+  // Esta función se encarga de obtener la lista de clientes desde una API y 
+  // manejar tanto las respuestas exitosas como los errores que puedan ocurrir 
+  
+  // durante el proceso. Si la respuesta de la solicitud es válida y contiene 
+  // datos en un formato esperado (tenemos un formato de un Array of Objects), 
+  // se asigna el array de clientes a la variable clients. En caso contrario, 
+  // se imprime un mensaje de error en la consola indicando que la estructura 
+  // de la respuesta es incorrecta.
+
+  private getClients(): void {
+    this.clientService.getClientList().subscribe(
+      (response: any) => {
+        console.log('Response from API:', response);
+        if (response && response.data && Array.isArray(response.data)) {
+          this.clients = response.data;
+        } else {
+          console.error('Invalid response format:', response);
+        }
+      },
+      (error) => {
+        console.error('Error fetching client list:', error);
+      }
+    );
   }
 }
