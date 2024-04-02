@@ -4,10 +4,12 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ClientListComponent } from './components/client/client-list/client-list.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ClientListComponent
   ],
   imports: [
     BrowserModule,
