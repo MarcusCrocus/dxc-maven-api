@@ -1,1 +1,29 @@
-<p>client-list works!</p>
+<!-- We will create html code to display list of existing Clients -->
+
+<!-- https://getbootstrap.com/docs/5.3/content/tables/#overview -->
+<h2> Client List</h2>
+<table class="table">
+  <!-- https://getbootstrap.com/docs/4.1/content/tables/ -->
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Surname</th>
+      <th scope="col">Name</th>
+      <th scope="col">Client</th>
+      <th scope="col">Age</th>
+    </tr>
+  </thead>
+
+  <!-- be able to iterate throw data of each object we use ngFor and have to initialize a clients variable in client-list.compontent.ts -->
+  <tbody>
+    <!-- ngFor A structural directive that renders a template for each item in a collection. The directive is placed on an element, which becomes the parent of the cloned templates. -->
+    <tr *ngFor="let client of clients">
+      <td>{{client.clientId}}</td>
+      <td>{{client.surname}}</td>
+      <td>{{client.name}}</td>
+      <td>{{client.isClient}}</td>
+      <td>{{client.age}}</td>
+    </tr>
+
+  </tbody>
+</table>
