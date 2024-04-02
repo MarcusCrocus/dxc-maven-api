@@ -9,5 +9,4 @@ public interface ClientRepo extends JpaRepository<Client, Integer>
     {
         Optional<Client> findBySurnameAndName(String surname, String name);
 
-
     }
