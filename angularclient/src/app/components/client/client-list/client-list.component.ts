@@ -18,8 +18,9 @@ export class ClientListComponent implements OnInit{
 
   // Esta función se encarga de obtener la lista de clientes desde una API y 
   // manejar tanto las respuestas exitosas como los errores que puedan ocurrir 
-  
-  // durante el proceso. Si la respuesta de la solicitud es válida y contiene 
+  // durante el proceso. 
+
+  // Si la respuesta de la solicitud es válida y contiene 
   // datos en un formato esperado (tenemos un formato de un Array of Objects), 
   // se asigna el array de clientes a la variable clients. En caso contrario, 
   // se imprime un mensaje de error en la consola indicando que la estructura 
@@ -40,4 +41,11 @@ export class ClientListComponent implements OnInit{
       }
     );
   }
+
+  // //ERROR RuntimeError: NG0900: Error trying to diff '[object Object]'. Only arrays and iterables are allowed
+  // private getClients(): void {
+  //   this.clientService.getClientList().subscribe(data => {
+  //     this.clients = data;
+  //   }, error => { console.error('Error fetching client list:', error); });  
+  // } 
 }
