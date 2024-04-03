@@ -12,7 +12,8 @@ export class CreateClientComponent implements OnInit {
   
 client: Client = new Client();
 
-  constructor() {}
+  constructor(private clientService: ClientService,
+    private router: Router) {}
   
   ngOnInit(): void {    
 
@@ -20,6 +21,21 @@ client: Client = new Client();
   
   onSubmit(){
     console.log(this.client);
+    this.saveClient();
+  }
+
+  //after submission of clients data we will redirect back to the client list
+  saveClient(){ 
+    this.clientService.createClient([this.client]).subscribe( data => {
+      console.log(data);
+      this.goToClientList();
+    }, 
+    error => console.log(error));
     
+  }
+
+  // redirection method
+  goToClientList(){
+    this.router.navigate(['/clients']);
   }
 }

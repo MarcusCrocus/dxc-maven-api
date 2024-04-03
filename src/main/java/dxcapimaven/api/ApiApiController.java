@@ -26,10 +26,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-
+@CrossOrigin(origins = "http://localhost:4200")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-03-13T13:41:52.185498100+01:00[Europe/Madrid]")
 @Controller
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("${openapi.apiTest.base-path:}")
 
 
