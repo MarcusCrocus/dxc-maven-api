@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -28,7 +27,7 @@ import javax.validation.constraints.NotNull;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-03-13T13:41:52.185498100+01:00[Europe/Madrid]")
-@Controller
+@RestController
 @RequestMapping("${openapi.apiTest.base-path:}")
 
 

@@ -1,29 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { Client } from '../../../client';
 import { ClientService } from '../../../client.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-client-list',
   templateUrl: './client-list.component.html',
   styleUrl: './client-list.component.css'
 })
-export class ClientListComponent implements OnInit{
- 
+export class ClientListComponent implements OnInit {
+
   clients: Client[] = [];
 
-  constructor(private clientService: ClientService){}
+  constructor(private clientService: ClientService, private router: Router) { }
   ngOnInit(): void {
     this.getClients();
   }
 
-  // Esta función se encarga de obtener la lista de clientes desde una API y 
-  // manejar tanto las respuestas exitosas como los errores que puedan ocurrir 
-  // durante el proceso. 
+  // Esta función se encarga de obtener la lista de clientes desde una API y
+  // manejar tanto las respuestas exitosas como los errores que puedan ocurrir
+  // durante el proceso.
 
-  // Si la respuesta de la solicitud es válida y contiene 
-  // datos en un formato esperado (tenemos un formato de un Array of Objects), 
-  // se asigna el array de clientes a la variable clients. En caso contrario, 
-  // se imprime un mensaje de error en la consola indicando que la estructura 
+  // Si la respuesta de la solicitud es válida y contiene
+  // datos en un formato esperado (tenemos un formato de un Array of Objects),
+  // se asigna el array de clientes a la variable clients. En caso contrario,
+  // se imprime un mensaje de error en la consola indicando que la estructura
   // de la respuesta es incorrecta.
 
   private getClients(): void {
@@ -41,11 +42,15 @@ export class ClientListComponent implements OnInit{
       }
     );
   }
+  updateClient(clientId: number) {
+    this.router.navigate(['/update-client', clientId]);
+  }
 
-  // //ERROR RuntimeError: NG0900: Error trying to diff '[object Object]'. Only arrays and iterables are allowed
-  // private getClients(): void {
-  //   this.clientService.getClientList().subscribe(data => {
-  //     this.clients = data;
-  //   }, error => { console.error('Error fetching client list:', error); });  
-  // } 
+
+  removeClient(clientId: number){
+    this.clientService.removeClient(clientId).subscribe(data =>{
+      console.log(data);
+      this.getClients();
+    })
+  }
 }

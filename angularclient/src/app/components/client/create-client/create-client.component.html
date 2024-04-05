@@ -1,31 +1,29 @@
-
 <div class="col-md-6 offset-md-3">
-    
-    <h3> Create Client</h3>
-  <form (ngSubmit) = "onSubmit()">
-  
+
+  <h3> Create Client</h3>
+  <form (ngSubmit)="onSubmit()">
+
     <div class="form-group">
       <label for="">Name</label>
-      <input type="text" class="form-control" id="name"
-      [(ngModel)] = "client.name" name = "name">
+      <input type="text" class="form-control" id="name" [(ngModel)]="client.name" name="name">
     </div>
     <div class="form-group">
       <label for=""> Surname</label>
-      <input type="text" class="form-control" id="surname"
-      [(ngModel)] = "client.surname" name = "surname">
+      <input type="text" class="form-control" id="surname" [(ngModel)]="client.surname" name="surname">
     </div>
     <div class="form-group">
       <label for=""> Age</label>
-      <input type="text" class="form-control" id="age"
-      [(ngModel)] = "client.age" name = "age">
+      <input type="text" class="form-control" id="age" [(ngModel)]="client.age" name="age">
     </div>
     <div class="form-group mb-3">
-      <label for=""> Client</label>
-      <input type="text" class="form-control" id="isClient"
-      [(ngModel)] = "client.isClient" name = "isClient">
+      <label for="">isClient</label>
+      <select class="form-control" id="isClient" [(ngModel)]="client.isClient" name="isClient">
+        <option [ngValue]="true">true</option>
+        <option [ngValue]="false">false</option>
+      </select>
     </div>
-  
+
     <button class="btn btn-success" type="submit">Submint</button>
-  
+
   </form>
-  </div>
+</div>

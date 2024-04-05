@@ -1,7 +1,7 @@
 <!-- We will create html code to display list of existing Clients -->
 
 <!-- https://getbootstrap.com/docs/5.3/content/tables/#overview -->
-<h2> Client List</h2>
+<h3>Client List</h3>
 <table class="table">
   <!-- https://getbootstrap.com/docs/4.1/content/tables/ -->
   <thead class="thead-dark">
@@ -11,6 +11,7 @@
       <th scope="col">Name</th>
       <th scope="col">Client</th>
       <th scope="col">Age</th>
+      <th>Actions</th>
     </tr>
   </thead>
 
@@ -18,12 +19,16 @@
   <tbody>
     <!-- ngFor A structural directive that renders a template for each item in a collection. The directive is placed on an element, which becomes the parent of the cloned templates. -->
     <tr *ngFor="let client of clients">
-      <td>{{client.clientId}}</td>
-      <td>{{client.surname}}</td>
-      <td>{{client.name}}</td>
-      <td>{{client.isClient}}</td>
-      <td>{{client.age}}</td>
-    </tr>
+      <td>{{ client.clientId }}</td>
+      <td>{{ client.surname }}</td>
+      <td>{{ client.name }}</td>
+      <td>{{ client.isClient }}</td>
+      <td>{{ client.age }}</td>
+      <td>
+        <button (click)="updateClient(client.clientId)" class="btn btn-info">Update</button>
 
+        <button (click)="removeClient(client.clientId)" class="btn btn-danger" style="margin-left: 10px;">Remove</button>
+      </td>
+    </tr>
   </tbody>
 </table>

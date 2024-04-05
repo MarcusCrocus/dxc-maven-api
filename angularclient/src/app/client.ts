@@ -1,5 +1,5 @@
 //class creating, variables should mantch with Entity variables
-export class Client {    
+export class Client {
     clientId: number = 0;
     name: string = '';
     surname: string = '';

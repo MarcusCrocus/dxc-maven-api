@@ -8,12 +8,14 @@ import { ClientListComponent } from './components/client/client-list/client-list
 import { HttpClientModule } from '@angular/common/http';
 import { CreateClientComponent } from './components/client/create-client/create-client.component';
 import { FormsModule } from '@angular/forms';
+import { UpdateClientComponent } from './components/client/update-client/update-client.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ClientListComponent,
     CreateClientComponent,
+    UpdateClientComponent,
   ],
   imports: [
     BrowserModule,
