@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"dxcapimaven"},{"l":"dxcapimaven.api"},{"l":"dxcapimaven.model"},{"l":"dxcapimaven.repository"}];updateSearchResults();
